@@ -25,8 +25,12 @@ server.on('request', (request, response)=>{
 				}
 				else
 				{
-					console.log(data);
 					response.setHeader('Content-Type','application/json');
+					let temp = JSON.parse(data);
+					console.dir(temp);
+					console.log(typeof temp);
+					console.log(temp[0]);
+					//response.end()
 					response.end(data);
 				}});
 			}
