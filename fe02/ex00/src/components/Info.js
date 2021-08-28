@@ -1,12 +1,10 @@
 import React , {useState, useEffect} from 'react';
 import axios from 'axios';
-import {Client} from '@notionhq/client';
-const notion = new Client({auth : "secret_vn5rc99df6ldJEADI8j1lrVt9wVdcJBFxqcQiJPBayF"});
 const pageId = "fcb39d41de084468b504cbca15ce92a2";
 const key = "secret_vn5rc99df6ldJEADI8j1lrVt9wVdcJBFxqcQiJPBayF";
 
 async function getAllUsers(text) {
-    const path = "/" + pageId;
+  
     try {
         const response = await axios({
             url : "http://localhost:4242/users",
@@ -15,7 +13,6 @@ async function getAllUsers(text) {
                 "key" : key,
             } 
         })
-        console.log(response.data.result);
         return (response.data.result);
     }
     catch (err) {
@@ -24,11 +21,25 @@ async function getAllUsers(text) {
     
 }
 
+function makeOneInfo(one) {
+    if (!one)
+        return (
+            <div> 잠시만 기다려주세요 </div>
+        );
+    const email = (one.type === "person") ? one.person.email : "없음";
+    return (
+        <ul key={one.id}>
+            <li>name : {one.name}</li>
+            <li>type : {one.type} </li>
+            <li>email : {email}</li>
+            <img width="50px" alt="프로필 이미지" src={one.avatar_url}></img>
+        </ul>
+    )
+}
 
 const Info = ()=> {
 
-    const [users, setUsers] = useState([{}]);
-    
+    const [users, setUsers] = useState([]);
 
     useEffect(()=>{
         getAllUsers()
@@ -38,17 +49,8 @@ const Info = ()=> {
     
     return (
         <div>
-            <input type="button" value="click" onClick={getAllUsers}/>
-            <h1>Users</h1>
-                {users.map(one =>(
-                    <ul>
-                        <li>id : {one.id}</li>
-                        <li>type : {one.type} </li>
-                        <li>email : {one.person.email}</li>
-                        <image></image>
-                    </ul>
-                    ))}
-                ))
+            <h1>Users List</h1>
+              {users.map(one =>(makeOneInfo(one)))}
         </div>
     )
 }
