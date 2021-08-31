@@ -46,11 +46,10 @@ const Info = ()=> {
             .then(res=>setUsers(res))
             .catch(console.error);
         }, []);
-    
     return (
         <div>
             <h1>Users List</h1>
-              {users.map(one =>(makeOneInfo(one)))}
+              {!users? "잠시만" : users.map(one =>(makeOneInfo(one)))}
         </div>
     )
 }
